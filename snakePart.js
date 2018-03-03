@@ -29,6 +29,7 @@ function snakePart(cell) {
 
     }
 
+
     this.move = function(xdir, ydir) {
 
         this.x += xdir * cell.w;

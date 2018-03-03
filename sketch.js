@@ -7,6 +7,12 @@ var apples = [];
 var x;
 var xmove = 0;
 var ymove = 0;
+var ydone = false;
+var odone = false;
+var rdone = false;
+var r = 0;
+var gameStart = false;
+var score = 0;
 
 function setup() {
     createCanvas(500, 500);
@@ -20,7 +26,6 @@ function setup() {
 }
 
 function draw() {
-    var i = 0;
     frameRate(10);
     background(52);
     fillGrid();
@@ -31,10 +36,9 @@ function draw() {
     snake.show();
     snake.move(xmove, ymove);
     for (apple of apples) {
-        console.log("snake: " + snake.getHeadX() + " " + ceil(snake.getHeadY()));
-        console.log("apple: " + apple.getX() + " " + ceil(apple.getY()));
         if (round(snake.getHeadX()) == round(apple.getX()) && round(snake.getHeadY()) == round(apple.getY())) {
             snake.eat();
+            score++;
             apples.pop();
             apples.push(new Apple(selectRandomCell()));
         }
@@ -42,28 +46,52 @@ function draw() {
 
 
 
-    //snake.eat();
+
+    if (snake.death()) {
+        snake.setTail(5);
+        xmove = 0;
+        ymove = 0;
+        if (gameStart) {
+            explode(snake.getHeadX(), snake.getHeadY());
+            if (ydone && odone && rdone) {
+                ydone = false;
+                odone = false;
+                rdone = false;
+            }
+        }
+        score = 0;
+        console.log("ded");
+    }
+
+    showScore();
+
 }
 
 function keyPressed() {
     switch (keyCode) {
         case UP_ARROW:
             xmove = 0;
-            ymove = -1;
+            if (ymove != 1) ymove = -1;
             break;
         case DOWN_ARROW:
             xmove = 0;
-            ymove = 1;
+            if (ymove != -1) ymove = 1;
             break;
         case RIGHT_ARROW:
-            xmove = 1;
+            if (xmove != -1) xmove = 1;
             ymove = 0;
             break;
         case LEFT_ARROW:
-            xmove = -1;
+            if (xmove != 1) xmove = -1;
             ymove = 0;
             break;
     }
+    gameStart = true;
+    r = 0;
+    ydone = false;
+    odone = false;
+    rdone = false;
+
 }
 
 function create2DArray() {
@@ -94,6 +122,8 @@ function selectRandomCell() {
     var col = floor(random(sqPerLine));
     var row = floor(random(sqPerLine));
 
+
+
     //var cell = new Cell(row, col);
 
     var cell = {
@@ -118,4 +148,60 @@ function selectCentreCell() {
     };
 
     return cell;
+}
+
+function explode(x, y) {
+
+    if (r < 71 && !ydone) {
+        noStroke();
+        fill(255, 255, 0);
+        ellipse(x + w / 2, y + w / 2, r, r);
+        console.log("yellow");
+        r += 7;
+        if (r >= 70) {
+            ydone = true;
+            r = 0;
+        }
+    }
+
+    if (r < 71 && ydone && !odone) {
+
+        noStroke();
+        fill(255, 140, 0);
+        ellipse(x + w / 2, y + w / 2, r, r);
+        console.log("orange");
+        r += 7;
+        if (r >= 70) {
+            odone = true;
+            r = 0;
+        }
+    }
+
+    if (r < 71 && ydone && odone && !rdone) {
+
+        noStroke();
+        fill(255, 0, 0);
+
+        ellipse(x + w / 2, y + w / 2, r, r);
+        console.log("red");
+        r += 7;
+        if (r >= 70) {
+            rdone = true;
+            r = 0;
+        }
+    }
+
+    if (ydone && odone && rdone) {
+        gameStart = false;
+    }
+}
+
+function showScore() {
+
+    stroke(50);
+    fill(255, 255, 255);
+    textFont("Helvetica");
+    textSize(30);
+    text(score, width / 2 - w / 4, 50);
+
 }

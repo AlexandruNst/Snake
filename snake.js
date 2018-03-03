@@ -14,7 +14,16 @@ function Snake(cell) {
     }
 
     //
-
+    this.death = function() {
+        var dead = false;
+        for (i = 1; i < tail; i++) {
+            if (snake[0].getX() == snake[i].getX() &&
+                snake[0].getY() == snake[i].getY())
+                dead = true;
+        }
+        //tail = 5;
+        return dead;
+    }
     /// Too much recursion
     // for (var i = 0; i < tail; i++) {
     //     snake.push(new Snake(cell));
@@ -22,11 +31,13 @@ function Snake(cell) {
 
     this.show = function() {
 
-        snake[0].show(0, 0, 255);
+
 
         for (i = 1; i < tail; i++) {
             snake[i].show(0, 255, 0);
         }
+
+        snake[0].show(0, 0, 255);
     }
 
     this.move = function(x, y) {
@@ -55,5 +66,14 @@ function Snake(cell) {
 
     this.getHeadY = function() {
         return snake[0].getY();
+    }
+
+    this.setTail = function(t) {
+
+        while (tail > t) {
+            snake.pop();
+            tail--;
+        }
+
     }
 }
