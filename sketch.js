@@ -13,6 +13,8 @@ var rdone = false;
 var r = 0;
 var gameStart = false;
 var score = 0;
+var command = 0;
+var plan;
 
 function setup() {
     createCanvas(500, 500);
@@ -26,6 +28,7 @@ function setup() {
 }
 
 function draw() {
+
     frameRate(10);
     background(52);
     fillGrid();
@@ -34,16 +37,6 @@ function draw() {
     }
 
     snake.show();
-    snake.move(xmove, ymove);
-    for (apple of apples) {
-        if (round(snake.getHeadX()) == round(apple.getX()) && round(snake.getHeadY()) == round(apple.getY())) {
-            snake.eat();
-            score++;
-            apples.pop();
-            apples.push(new Apple(selectRandomCell()));
-        }
-    }
-
 
 
 
@@ -64,6 +57,21 @@ function draw() {
     }
 
     showScore();
+    plan = createPlan(apples[0]);
+    executePlan(plan);
+
+    snake.move(xmove, ymove);
+    for (apple of apples) {
+        if (round(snake.getHeadX()) == round(apple.getX()) && round(snake.getHeadY()) == round(apple.getY())) {
+            snake.eat();
+            score++;
+
+            apples.pop();
+            newApple = new Apple(selectRandomCell());
+            apples.push(newApple);
+        }
+    }
+
 
 }
 
@@ -203,5 +211,124 @@ function showScore() {
     textFont("Helvetica");
     textSize(30);
     text(score, width / 2 - w / 4, 50);
+
+}
+
+function createPlanB(apple) {
+
+    var snakeX = round(snake.getHeadX() / w);
+    var snakeY = round(snake.getHeadY() / w);
+
+    var appleX = round(apple.getX() / w);
+    var appleY = round(apple.getY() / w);
+
+    var travelX = abs(snakeX - appleX);
+    var travelY = abs(snakeY - appleY);
+
+    var plan = [];
+    if (appleX < snakeX) {
+        while (travelX > 0) {
+            plan.push(1);
+            travelX--;
+        }
+    } else {
+        while (travelX > 0) {
+            plan.push(3);
+            travelX--;
+        }
+    }
+
+    if (appleY < snakeY) {
+        while (travelY > 0) {
+            plan.push(4);
+            travelY--;
+        }
+    } else {
+        while (travelY > 0) {
+            plan.push(2);
+            travelY--;
+        }
+    }
+
+    return plan;
+
+}
+
+function createPlan(apple) {
+
+    var snakeX = round(snake.getHeadX() / w);
+    var snakeY = round(snake.getHeadY() / w);
+
+    var appleX = round(apple.getX() / w);
+    var appleY = round(apple.getY() / w);
+
+    if (snakeX > appleX) {
+        if (!snake.virtualDeath(-w, 0)) return 1;
+        else if (!snake.virtualDeath(0, -w)) return 4;
+        else if (!snake.virtualDeath(0, w)) return 2;
+        else return 3;
+    } else if (snakeX < appleX) {
+        if (!snake.virtualDeath(w, 0)) return 3;
+        else if (!snake.virtualDeath(0, w)) return 4;
+        else if (!snake.virtualDeath(0, w)) return 2;
+        else return 1;
+    } else if (snakeY > appleY) {
+        if (!snake.virtualDeath(0, -w)) return 4;
+        else if (!snake.virtualDeath(w, 0)) return 3;
+        else if (!snake.virtualDeath(-w, 0)) return 1;
+        else return 2;
+        round(w)
+    } else if (snakeY < appleY) {
+        if (!snake.virtualDeath(0, w)) return 2;
+        else if (!snake.virtualDeath(w, 0)) return 3;
+        else if (!snake.virtualDeath(-w, 0)) return 1;
+        else return 4;
+    }
+
+}
+
+function executePlan(plan) {
+    switch (plan) {
+        case 4:
+            xmove = 0;
+            ymove = -1;
+            break;
+        case 2:
+            xmove = 0;
+            ymove = 1;
+            break;
+        case 3:
+            xmove = 1;
+            ymove = 0;
+            break;
+        case 1:
+            xmove = -1;
+            ymove = 0;
+            break;
+    }
+}
+
+function executePlanB(plan) {
+
+    switch (plan[command]) {
+        case 4:
+            xmove = 0;
+            ymove = -1;
+            break;
+        case 2:
+            xmove = 0;
+            ymove = 1;
+            break;
+        case 3:
+            xmove = 1;
+            ymove = 0;
+            break;
+        case 1:
+            xmove = -1;
+            ymove = 0;
+            break;
+    }
+
+    command++;
 
 }

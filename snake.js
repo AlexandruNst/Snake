@@ -24,6 +24,37 @@ function Snake(cell) {
         //tail = 5;
         return dead;
     }
+
+    this.virtualDeath = function(x, y) {
+        var dead = false;
+
+        var asdfX = round(snake[0].getX() + x);
+        var asdfY = round(snake[0].getY() + y);
+
+        if (asdfX > cell.canvasW - cell.w) {
+            asdfX = 0;
+        }
+
+        if (asdfY > cell.canvasW - cell.w) {
+            asdfY = 0;
+        }
+
+        if (asdfX < -0.1) {
+            asdfX = cell.canvasW - cell.w;
+        }
+
+        if (asdfY < -0.1) {
+            asdfY = cell.canvasW - cell.w;
+        }
+
+        for (i = 1; i < tail - 1; i++) {
+            if (asdfX == round(snake[i].getX()) &&
+                asdfY == round(snake[i].getY()))
+                dead = true;
+        }
+        return dead;
+    }
+
     /// Too much recursion
     // for (var i = 0; i < tail; i++) {
     //     snake.push(new Snake(cell));
