@@ -3,8 +3,12 @@ function Snake(cell) {
     var snake = [];
     var tail = 5;
     //
-    this.x = cell.x;
-    this.y = cell.y;
+
+    for (var i = 0; i < tail; i++) {
+        snake.push(new snakePart(cell))
+        //    cell.x--;
+    }
+
     //
 
     /// Too much recursion
@@ -14,12 +18,19 @@ function Snake(cell) {
 
     this.show = function() {
         for (i = 0; i < tail; i++) {
-            noStroke();
-            fill(0, 255, 0);
-            rect(this.x, this.y, cell.w, cell.w);
+            snake[i].show();
         }
     }
 
+    this.move = function(x, y) {
 
+        for (i = tail - 1; i > 0; i--) {
+            snake[i].setX(snake[i - 1].getX());
+            snake[i].setY(snake[i - 1].getY());
+        }
+
+        snake[0].move(x, y);
+        //this.show();
+    }
 
 }

@@ -5,6 +5,8 @@ var sqPerLine = 15;
 var w;
 var apples = [];
 var x;
+var xmove = 0;
+var ymove = 0;
 
 function setup() {
     createCanvas(500, 500);
@@ -17,12 +19,36 @@ function setup() {
 }
 
 function draw() {
-    background(51);
+    var i = 0;
+    frameRate(10);
+    background(52);
     fillGrid();
     for (apple of apples) {
         apple.show();
     }
-    //snake.show();
+    snake.show();
+    snake.move(xmove, ymove);
+}
+
+function keyPressed() {
+    switch (keyCode) {
+        case UP_ARROW:
+            xmove = 0;
+            ymove = -1;
+            break;
+        case DOWN_ARROW:
+            xmove = 0;
+            ymove = 1;
+            break;
+        case RIGHT_ARROW:
+            xmove = 1;
+            ymove = 0;
+            break;
+        case LEFT_ARROW:
+            xmove = -1;
+            ymove = 0;
+            break;
+    }
 }
 
 function create2DArray() {
@@ -73,7 +99,8 @@ function selectCentreCell() {
     var cell = {
         x: col,
         y: row,
-        w: width / sqPerLine
+        w: width / sqPerLine,
+        canvasW: width
     };
     console.log("centre cell" + col + " " + row);
 
