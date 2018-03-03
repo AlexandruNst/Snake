@@ -10,6 +10,7 @@ var ymove = 0;
 
 function setup() {
     createCanvas(500, 500);
+
     apple = new Apple(selectRandomCell());
     apples.push(apple);
     grid = create2DArray();
@@ -26,8 +27,22 @@ function draw() {
     for (apple of apples) {
         apple.show();
     }
+
     snake.show();
     snake.move(xmove, ymove);
+    for (apple of apples) {
+        console.log("snake: " + snake.getHeadX() + " " + ceil(snake.getHeadY()));
+        console.log("apple: " + apple.getX() + " " + ceil(apple.getY()));
+        if (round(snake.getHeadX()) == round(apple.getX()) && round(snake.getHeadY()) == round(apple.getY())) {
+            snake.eat();
+            apples.pop();
+            apples.push(new Apple(selectRandomCell()));
+        }
+    }
+
+
+
+    //snake.eat();
 }
 
 function keyPressed() {
@@ -86,7 +101,6 @@ function selectRandomCell() {
         y: row,
         w: width / sqPerLine
     };
-    console.log("random cell" + col + " " + row);
 
     return cell;
 }
@@ -94,7 +108,7 @@ function selectRandomCell() {
 function selectCentreCell() {
 
     var col = floor(sqPerLine / 2);
-    var row = col;
+    var row = floor(col);
 
     var cell = {
         x: col,
@@ -102,7 +116,6 @@ function selectCentreCell() {
         w: width / sqPerLine,
         canvasW: width
     };
-    console.log("centre cell" + col + " " + row);
 
     return cell;
 }

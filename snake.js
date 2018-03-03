@@ -6,6 +6,10 @@ function Snake(cell) {
 
     for (var i = 0; i < tail; i++) {
         snake.push(new snakePart(cell))
+        //
+        // for (var i = 0; i < tail; i++) {
+        //     snake[i].move(cell.x, cell.y);
+        // }
         //    cell.x--;
     }
 
@@ -17,8 +21,11 @@ function Snake(cell) {
     // }
 
     this.show = function() {
-        for (i = 0; i < tail; i++) {
-            snake[i].show();
+
+        snake[0].show(0, 0, 255);
+
+        for (i = 1; i < tail; i++) {
+            snake[i].show(0, 255, 0);
         }
     }
 
@@ -33,4 +40,20 @@ function Snake(cell) {
         //this.show();
     }
 
+    this.eat = function() {
+        tail++;
+        snake.push(new snakePart(cell));
+        snake[tail - 1].setX(snake[tail - 2].getX() - 1);
+        snake[tail - 1].setY(snake[tail - 2].getY() - 1);
+
+        console.log("tail: " + tail);
+    }
+
+    this.getHeadX = function() {
+        return snake[0].getX();
+    }
+
+    this.getHeadY = function() {
+        return snake[0].getY();
+    }
 }

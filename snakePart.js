@@ -19,10 +19,10 @@ function snakePart(cell) {
     this.setY = function(y) {
         this.y = y;
     }
-    this.show = function() {
+    this.show = function(r, g, b) {
 
         noStroke();
-        fill(0, 255, 0);
+        fill(r, g, b);
         rect(this.x, this.y, cell.w, cell.w);
 
 
@@ -35,21 +35,30 @@ function snakePart(cell) {
         this.y += ydir * cell.w;
 
 
-        if (this.x > cell.canvasW) {
+        if (this.x > cell.canvasW - 1) {
             this.x = 0;
         }
 
-        if (this.y > cell.canvasW) {
+        if (this.y > cell.canvasW - 1) {
             this.y = 0;
         }
 
-        if (this.x < -1) {
-            this.x = cell.canvasW;
+        if (this.x < -0.1) {
+            this.x = cell.canvasW - cell.w;
         }
 
-        if (this.y < -1) {
-            this.y = cell.canvasW;
+        if (this.y < -0.1) {
+            this.y = cell.canvasW - cell.w;
         }
     }
+
+    // this.getPos = function() {
+    //     return cell = {
+    //         x: this.x / cell.w,
+    //         y: this.y / cell.w
+    //     };
+    // }
+    //
+    //
 
 }

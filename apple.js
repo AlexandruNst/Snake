@@ -14,6 +14,21 @@ function Apple(cell) {
         strokeWeight(4);
         line(this.x + cell.w / 2, this.y - this.r + 2 + cell.w / 2, this.x + 5 + cell.w / 2, this.y - this.r - 5 + cell.w / 2);
 
-        console.log("apple" + this.x + " " + this.y);
+
     }
+
+    this.getX = function() {
+        return this.x;
+    }
+
+    this.getY = function() {
+        return this.y;
+    }
+
+    // this.getPos = function() {
+    //     return cell = {
+    //         x: this.x / cell.w,
+    //         y: this.y / cell.w
+    //     };
+    // }
 }
