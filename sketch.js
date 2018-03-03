@@ -15,6 +15,8 @@ var gameStart = false;
 var score = 0;
 var command = 0;
 var plan;
+var button;
+var ai = true;
 
 function setup() {
     createCanvas(500, 500);
@@ -25,6 +27,15 @@ function setup() {
     var a = selectCentreCell();
     snake = new Snake(a);
     w = width / sqPerLine;
+
+    button = createButton('Change Mode');
+    button.position(height - 10, width + 10);
+    button.mousePressed(changeMode);
+}
+
+function changeMode() {
+    if (ai) ai = false;
+    else ai = true;
 }
 
 function draw() {
@@ -37,8 +48,6 @@ function draw() {
     }
 
     snake.show();
-
-
 
     if (snake.death()) {
         snake.setTail(5);
@@ -57,8 +66,10 @@ function draw() {
     }
 
     showScore();
-    plan = createPlan(apples[0]);
-    executePlan(plan);
+    if (ai) {
+        plan = createPlan(apples[0]);
+        executePlan(plan);
+    }
 
     snake.move(xmove, ymove);
     for (apple of apples) {
@@ -94,12 +105,11 @@ function keyPressed() {
             ymove = 0;
             break;
     }
-    gameStart = true;
     r = 0;
     ydone = false;
     odone = false;
     rdone = false;
-
+    gameStart = true;
 }
 
 function create2DArray() {
